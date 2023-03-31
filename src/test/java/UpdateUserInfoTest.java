@@ -4,6 +4,7 @@ import model.Auth;
 import model.User;
 import model.generators.UserGenerator;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,10 +13,16 @@ import static org.junit.Assert.assertEquals;
 public class UpdateUserInfoTest {
 
     private UserSteps userSteps;
+    private String accessToken;
 
     @Before
     public void setUp() {
         userSteps = new UserSteps();
+    }
+
+    @After
+    public void clearData() {
+        userSteps.delete(accessToken);
     }
 
     @Test
@@ -25,7 +32,7 @@ public class UpdateUserInfoTest {
 
         Auth auth = new Auth(user.getEmail(), user.getPassword());
         ValidatableResponse createResponseUser = userSteps.login(auth);
-        String accessToken = createResponseUser.extract().path("accessToken");
+        accessToken = createResponseUser.extract().path("accessToken");
 
         User userNewEmail = user;
         userNewEmail.setEmail((RandomStringUtils.randomAlphabetic(12) + "@" + RandomStringUtils.randomAlphabetic(6) + ".example"));
@@ -45,7 +52,7 @@ public class UpdateUserInfoTest {
 
         Auth auth = new Auth(user.getEmail(), user.getPassword());
         ValidatableResponse createResponseUser = userSteps.login(auth);
-        String accessToken = createResponseUser.extract().path("accessToken");
+        accessToken = createResponseUser.extract().path("accessToken");
 
         User userNewPwd = user;
         userNewPwd.setPassword(RandomStringUtils.randomAlphabetic(12));
@@ -64,7 +71,7 @@ public class UpdateUserInfoTest {
 
         Auth auth = new Auth(user.getEmail(), user.getPassword());
         ValidatableResponse createResponseUser = userSteps.login(auth);
-        String accessToken = createResponseUser.extract().path("accessToken");
+        accessToken = createResponseUser.extract().path("accessToken");
 
         User userNewName = user;
         userNewName.setName(RandomStringUtils.randomAlphabetic(12));
@@ -81,7 +88,7 @@ public class UpdateUserInfoTest {
         User user = UserGenerator.getRandom();
         ValidatableResponse createResponseUser = userSteps.create(user);
 
-        String accessToken = createResponseUser.extract().path("accessToken");
+        accessToken = createResponseUser.extract().path("accessToken");
 
         User userNewName = user;
         userNewName.setName(RandomStringUtils.randomAlphabetic(12));

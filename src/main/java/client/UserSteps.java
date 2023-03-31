@@ -45,4 +45,13 @@ public class UserSteps extends BurgerRestClient {
                 .then();
     }
 
+    @Step("Delete user info {user}")
+    public ValidatableResponse delete(String token){
+        return given()
+                .spec(getBaseReqSpec())
+                .headers("authorization", token)
+                .when()
+                .delete(ORDER_URI + "/user")
+                .then();
+    }
 }

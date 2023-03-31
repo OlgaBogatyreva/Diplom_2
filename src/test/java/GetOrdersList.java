@@ -7,6 +7,7 @@ import model.User;
 import model.generators.UserGenerator;
 import model.orderList.OrdersList;
 import org.hamcrest.MatcherAssert;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,11 +17,19 @@ import static org.junit.Assert.assertEquals;
 public class GetOrdersList {
     private OrderSteps orderSteps;
     private UserSteps userSteps;
+    private String accessToken;
 
     @Before
     public void setUp() {
         orderSteps = new OrderSteps();
         userSteps = new UserSteps();
+    }
+
+    @After
+    public void clearData(){
+        if (accessToken != null) {
+            userSteps.delete(accessToken);
+        }
     }
 
     @Test
@@ -32,7 +41,7 @@ public class GetOrdersList {
         //юзер авторизуется
         Auth auth = new Auth(user.getEmail(), user.getPassword());
         ValidatableResponse createResponse = userSteps.login(auth);
-        String accessToken = createResponse.extract().path("accessToken");
+        accessToken = createResponse.extract().path("accessToken");
 
         //создает 4 заказа
         Order order = new Order(new String[]{"61c0c5a71d1f82001bdaaa6c", "61c0c5a71d1f82001bdaaa73"});
